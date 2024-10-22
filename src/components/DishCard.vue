@@ -1,7 +1,7 @@
 <template>
     <div class="dish-card" @dblclick="$emit('remove')">
-      <img :src="avatarUrl" alt="avatar" class="player-avatar" />
-      <h3 class="player-nickname">{{ nickname }}</h3>
+      <img :src="picUrl" alt="avatar" class="player-avatar" />
+      <h3 class="player-name">{{ name }}</h3>
       <p class="player-slogan">{{ slogan }}</p>
     </div>
 </template>
@@ -13,11 +13,11 @@ import type { PropType } from 'vue';
 export default defineComponent({
 name: 'DishCard',
 props: {
-    avatarUrl: {
+    picUrl: {
     type: String as PropType<string>,
     required: true
     },
-    nickname: {
+    name: {
     type: String as PropType<string>,
     required: true
     },
@@ -50,7 +50,7 @@ border-radius: 50%;
 object-fit: cover;
 }
 
-.player-nickname {
+.player-name {
 font-size: 1.2em;
 margin-top: 10px;
 color: #333;

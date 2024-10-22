@@ -1,5 +1,5 @@
 // 定义餐厅接口
-export interface Canteen {
+export interface Dish {
     id: number;
     name: string;
     picUrl: string;

@@ -30,7 +30,6 @@
           />
         </div>
 
-        <!-- <div class="treeContainer" ref="treeContainer" :style="{ paddingLeft: dynamicPaddingLeft + 'px' }"> -->
         <div class="treeContainer" ref="treeContainer">
           <div class="competitionTree" :style="{ paddingLeft: dynamicPaddingLeft + 'px' }">
             <BinaryTreeNode :node="rootNode" />
@@ -66,6 +65,9 @@
             @onAdd="showModal = true"
           />
         </div>
+
+        <div class="save-button" @click="savePlayersToLocalStorage">保存选手</div>
+
       </div>
     </div>
   </div>
@@ -118,11 +120,18 @@ export default defineComponent({
     // 读取选手信息
     const fetchPlayers = async () => {
       try {
-        const response = await fetch(playersListUrl.value);
-        if (!response.ok) {
-          throw new Error('Failed to fetch players data');
+        const savedPlayers = localStorage.getItem('players');
+        if (savedPlayers) {
+          players.value = JSON.parse(savedPlayers);
         }
-        players.value = await response.json();
+        else{
+          const response = await fetch(playersListUrl.value);
+          if (!response.ok) {
+            throw new Error('Failed to fetch players data');
+          }
+          players.value = await response.json();
+        }
+
       } catch (error) {
         console.error('Error loading players:', error);
       } finally {
@@ -298,7 +307,7 @@ export default defineComponent({
       players.value = players.value.filter(player => player.id !== playerId);
     };
 
-    // ******************选手展示部分（结束）*******************
+    // ******************弹幕相关（开始）*******************
 
     // ******************弹幕相关（开始）*******************
     const addBarrage = (message: Barrage) => {
@@ -330,6 +339,11 @@ export default defineComponent({
     };
     // ******************弹幕相关（结束）*******************
 
+    // ******************保存选手 （开始）*******************
+    function savePlayersToLocalStorage() {
+      localStorage.setItem('players', JSON.stringify(players.value));
+    }
+
     return {
       backgroundImageUrl,
       treeHeight,
@@ -351,7 +365,8 @@ export default defineComponent({
       getRandomSpeed,
       getRandomColor, 
       handleAddingPlayer,
-      deletePlayer
+      deletePlayer,
+      savePlayersToLocalStorage
     };
   }
 });
@@ -362,13 +377,10 @@ export default defineComponent({
 .general_container {
   display: flex;
   flex-direction: column;
-  background-size: fixed; /* 使背景图充满容器 */
-  background-position:center; /* 让背景图片居中 */
-  position: relative;
-  background-color: rgb(255, 255, 255);
+  background-size: cover;
+  background-position: center;
   height: 100%;
   width: 100%;
-  box-shadow: 'light';
   align-items: center;
   justify-content: center;
 }
@@ -377,7 +389,7 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   position: relative;
-  margin-top: 180px;
+  margin-top: 40px;
   height: 90%;
   align-items: center;
   z-index: 1; 
@@ -415,12 +427,20 @@ button {
 .treeContainer {
   overflow-x: auto;   
   overflow-y: auto; 
-  max-width: 400px;
+  max-width: 700px;
   border: 1px solid #ccc;
   padding: 10px;
   align-items: center;
   justify-content: center;
   border-radius: 8px;
+}
+
+/* 针对移动端的样式 */
+/* 当设备宽度小于或等于 480px（常见的手机屏幕宽度）时，应用内部的 CSS 样式。 */
+@media (max-width: 480px) {
+  .treeContainer {
+    max-width: 370px; /* 设置为屏幕宽度 */
+  }
 }
 
 .competitionTree {
@@ -469,6 +489,21 @@ button {
   animation: scroll-left linear infinite;
   /* 增加动画持续时间，可以让滚动看起来更平滑 */
   animation-duration: 100s; /* 根据需求调整时间 */
+}
+
+.save-button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #f6f7f6;
+  color: rgb(12, 12, 12);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.save-button:hover {
+  background-color: #45a049;
 }
 
 @keyframes scroll-left {

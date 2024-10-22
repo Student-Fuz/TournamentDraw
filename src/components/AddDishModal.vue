@@ -4,8 +4,8 @@
         <h2>添加餐厅</h2>
         <form @submit.prevent="submitForm">
           <div class="form-group">
-            <label for="nickname">昵称: </label>
-            <input v-model="nickname" type="text" id="nickname" required />
+            <label for="name">昵称: </label>
+            <input v-model="name" type="text" id="name" required />
           </div>
   
           <div class="form-group">
@@ -40,9 +40,9 @@
     },
     emits: ['close', 'add-dish'],
     setup(props, { emit }) {
-      const nickname = ref<string>('');
+      const name = ref<string>('');
       const slogan = ref<string>('');
-      const avatarUrl = ref<string>('');
+      const picUrl = ref<string>('');
   
       const handleFileChange = (event: Event) => {
         const target = event.target as HTMLInputElement;
@@ -50,15 +50,15 @@
         if (file) {
           const reader = new FileReader();
           reader.onload = (e: ProgressEvent<FileReader>) => {
-            avatarUrl.value = e.target?.result as string;
+            picUrl.value = e.target?.result as string;
           };
           reader.readAsDataURL(file);
         }
       };
   
       const submitForm = () => {
-        if (nickname.value && slogan.value && avatarUrl.value) {
-          emit('add-dish', { nickname: nickname.value, slogan: slogan.value, avatarUrl: avatarUrl.value });
+        if (name.value && slogan.value && picUrl.value) {
+          emit('add-dish', { name: name.value, slogan: slogan.value, picUrl: picUrl.value });
           closeModal();
         }
       };
@@ -68,9 +68,9 @@
       };
   
       return {
-        nickname,
+        name,
         slogan,
-        avatarUrl,
+        picUrl,
         handleFileChange,
         submitForm,
         closeModal

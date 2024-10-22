@@ -1,7 +1,7 @@
 <template>
   <div class="player-card">
-    <img :src="avatarUrl" alt="avatar" class="player-avatar" />
-    <h3 class="player-nickname">{{ nickname }}</h3>
+    <img :src="picUrl" alt="avatar" class="player-avatar" />
+    <h3 class="player-name">{{ name }}</h3>
     <p class="player-slogan">{{ slogan }}</p>
     <button @click="onAdd">添加</button>
   </div>
@@ -15,11 +15,11 @@ export default defineComponent({
   name: 'AddingDishCard',
   emits: ['onAdd'],
   props: {
-    avatarUrl: {
+    picUrl: {
       type: String as PropType<string>,
       required: false
     },
-    nickname: {
+    name: {
       type: String as PropType<string>,
       required: false
     },
@@ -64,7 +64,7 @@ border-radius: 50%;
 object-fit: cover;
 }
 
-.player-nickname {
+.player-name {
 font-size: 1.2em;
 margin-top: 10px;
 color: #333;
