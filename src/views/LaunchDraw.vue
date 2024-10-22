@@ -49,6 +49,9 @@
   </div>
 </template>
 
+<!-- TODO 1. 新增内容的删除bug，2. 新增内容大小问题-->
+<!-- 1. 新增内容应对应加以id -->
+<!-- 2. 新增内容的图片应该压缩 -->
 <script lang="ts">
 import { defineComponent, ref, watch, onMounted } from 'vue';
 import type { Dish } from '../types/Dish';
@@ -101,6 +104,7 @@ export default defineComponent({
 
     // 添加选手
     const handleAddingDish = (newDish: Dish) => {
+      newDish.id = dishes.value.length + 1;
       dishes.value.push(newDish);
       showModal.value = false;
     };
@@ -116,18 +120,18 @@ export default defineComponent({
       if (dishes.value.length === 0 || drawing.value) return; // 防止重复抽签
       drawing.value = true;
       delay = 10; // 重置速度
-      rolldishes();
+      rollDishes();
     };
 
     // 递减速度的滚动抽签
-    const rolldishes = () => {
+    const rollDishes = () => {
       timerId = setTimeout(() => {
         const randomIndex = Math.floor(Math.random() * dishes.value.length);
         selectedDish.value = dishes.value[randomIndex];
 
         if (delay < 1000) {
           delay += 100; // 每次延长间隔时间，减慢速度
-          rolldishes(); // 继续滚动
+          rollDishes(); // 继续滚动
         } else {
           drawing.value = false; // 结束抽签
           clearTimeout(timerId!);
