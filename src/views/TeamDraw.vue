@@ -145,6 +145,7 @@ export default defineComponent({
         slogan : newPlayer.slogan,
         avatarUrl : newPlayer.avatarUrl,
       }
+      player.id = players.value.length + 1;
       players.value.push(player);
       showModal.value = false;
     };
